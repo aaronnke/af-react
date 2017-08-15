@@ -25,3 +25,36 @@ export const fetchLatestArticles = () => dispatch => (
     },
   )
 );
+
+export const fetchCategories = () => dispatch => (
+  api.fetchCategories().then(
+    (response) => {
+      dispatch({
+        type: 'FETCH_CATEGORIES_SUCCESS',
+        response: normalize(response, schema.arrayOfCategories),
+      });
+    },
+    (error) => {
+      dispatch({
+        type: 'FETCH_CATEGORIES_FAILURE',
+        message: error.message || 'Something went wrong.',
+      });
+    },
+  )
+);
+
+export const fetchInitialData = () => dispatch => (
+  api.fetchInitialData().then(
+    (response) => {
+      dispatch({
+        type: 'FETCH_CATEGORIES_SUCCESS',
+        response: normalize(response.categories, schema.arrayOfCategories),
+      });
+      dispatch({
+        type: 'FETCH_ARTICLES_SUCCESS',
+        filter: 'all',
+        response: normalize(response.articles, schema.arrayOfArticles),
+      });
+    },
+  )
+);

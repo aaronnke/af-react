@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ArticleCard from './ArticleCard';
+import '../css/ArticleList.css';
 
 function ArticleList({ articles }) {
   if (!articles.length) {
     return (
-      <div></div>
+      <div>Loading</div>
     );
   }
   return (
-    <div>
+    <div className="ArticleList">
       {articles.map(article =>
         (<ArticleCard
           key={article.id}
