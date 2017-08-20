@@ -27,9 +27,22 @@ const createList = (filter) => {
     }
   };
 
+  const page = (state = 1, action) => {
+    if (action.filter !== filter) {
+      return state;
+    }
+    switch (action.type) {
+      case 'FETCH_ARTICLES_SUCCESS':
+        return state + 1;
+      default:
+        return state;
+    }
+  };
+
   return combineReducers({
     ids,
     isFetching,
+    page,
   });
 };
 
@@ -37,3 +50,4 @@ export default createList;
 
 export const getIds = state => state.ids;
 export const getIsFetching = state => state.isFetching;
+export const getPage = state => state.page;

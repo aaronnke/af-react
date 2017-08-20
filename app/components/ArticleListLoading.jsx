@@ -3,7 +3,7 @@ import '../css/ArticleList.css';
 import '../css/ArticleListLoading.css';
 
 const ArticleListLoading = () => {
-  const loader = [1, 2, 3];
+  const loader = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const articles = loader.map(id => (
     <div key={id} className="ArticleCard">
       <div className="loading ArticleCard__image--loading ArticleCard__image" />

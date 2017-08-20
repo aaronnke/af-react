@@ -20,9 +20,15 @@ const ArticlePage = ({ category, title, author, date, image, content }) => {
 };
 
 ArticlePage.propTypes = {
-  category: PropTypes.string.isRequired,
+  category: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  author: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   date: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,

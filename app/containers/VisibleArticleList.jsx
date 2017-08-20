@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getVisibleArticles, getIsFetching } from '../reducers';
+import { getVisibleArticles, getIsFetching, getPage } from '../reducers';
 import * as actions from '../actions';
 import ArticleList from '../components/ArticleList';
 import ArticleListLoading from '../components/ArticleListLoading';
@@ -9,10 +9,6 @@ import ArticleListLoading from '../components/ArticleListLoading';
 class VisibleArticleListComponent extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      page: 1,
-    };
-
     this.fetchData = this.fetchData.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
@@ -22,19 +18,22 @@ class VisibleArticleListComponent extends Component {
     window.addEventListener('scroll', this.handleScroll);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
   fetchData() {
-    const { fetchArticles, filter } = this.props;
-    fetchArticles(this.state.page, filter);
+    const { fetchArticles, filter, page } = this.props;
+    fetchArticles(page, filter);
   }
 
   handleScroll() {
+    const { isFetching } = this.props;
+    if (isFetching) return;
     const windowHeight = window.innerHeight;
     const pageOffset = window.pageYOffset;
     const totalHeight = document.body.offsetHeight;
-    if (pageOffset + windowHeight >= totalHeight * 0.8) {
-      this.setState(prevState => ({
-        page: prevState.page + 1,
-      }));
+    if (pageOffset + windowHeight > totalHeight * 0.8) {
       this.fetchData();
     }
   }
@@ -59,6 +58,7 @@ const mapStateToProps = (state) => {
     isFetching: getIsFetching(state, filter),
     articles: getVisibleArticles(state, filter),
     filter,
+    page: getPage(state, filter),
   };
 };
 

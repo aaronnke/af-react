@@ -23,3 +23,6 @@ export const getArticle = (state, id) =>
 
 export const getIsFetching = (state, filter) =>
   fromCreateList.getIsFetching(state.listByFilter[filter]);
+
+export const getPage = (state, filter) =>
+  fromCreateList.getPage(state.listByFilter[filter]);
