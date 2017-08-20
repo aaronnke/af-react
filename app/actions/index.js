@@ -1,60 +1,49 @@
 import { normalize } from 'normalizr';
 import * as schema from './schema';
 import * as api from '../api';
+import { getIsFetching } from '../reducers';
 
-export const updateText = text => dispatch =>
+export const fetchArticle = id => dispatch => (
+  api.fetchArticle(id).then(
+    (response) => {
+      dispatch({
+        type: 'FETCH_ARTICLE_SUCCESS',
+        response: normalize(response, schema.article),
+      });
+    },
+    (error) => {
+      dispatch({
+        type: 'FETCH_ARTICLE_FAILURE',
+        message: error.message || 'Something went wrong.',
+      });
+    },
+  )
+);
+
+export const fetchArticles = (page, filter) => (dispatch, getState) => {
+  if (getIsFetching(getState(), filter)) {
+    return Promise.resolve();
+  }
+
   dispatch({
-    type: 'UPDATE_TEXT',
-    text,
+    type: 'FETCH_ARTICLES_REQUEST',
+    filter,
   });
 
-export const fetchLatestArticles = () => dispatch => (
-  api.fetchLatestArticles().then(
+  return api.fetchArticles(page, filter).then(
     (response) => {
       dispatch({
         type: 'FETCH_ARTICLES_SUCCESS',
-        filter: 'all',
+        filter,
         response: normalize(response, schema.arrayOfArticles),
       });
     },
     (error) => {
       dispatch({
         type: 'FETCH_ARTICLES_FAILURE',
+        filter,
         message: error.message || 'Something went wrong.',
       });
     },
-  )
-);
-
-export const fetchCategories = () => dispatch => (
-  api.fetchCategories().then(
-    (response) => {
-      dispatch({
-        type: 'FETCH_CATEGORIES_SUCCESS',
-        response: normalize(response, schema.arrayOfCategories),
-      });
-    },
-    (error) => {
-      dispatch({
-        type: 'FETCH_CATEGORIES_FAILURE',
-        message: error.message || 'Something went wrong.',
-      });
-    },
-  )
-);
-
-export const fetchInitialData = () => dispatch => (
-  api.fetchInitialData().then(
-    (response) => {
-      dispatch({
-        type: 'FETCH_CATEGORIES_SUCCESS',
-        response: normalize(response.categories, schema.arrayOfCategories),
-      });
-      dispatch({
-        type: 'FETCH_ARTICLES_SUCCESS',
-        filter: 'all',
-        response: normalize(response.articles, schema.arrayOfArticles),
-      });
-    },
-  )
-);
+  );
+};

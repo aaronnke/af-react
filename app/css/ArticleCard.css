@@ -2,7 +2,9 @@
   display: grid;
   grid-template-columns: 270px 100fr;
   margin: 9px 0;
-  height: 188px;
+  --height: 188px;
+  height: var(--height);
+  border-bottom: 1px solid rgba(0,0,0,0.12);
 }
 
 .ArticleCard__image {
@@ -10,44 +12,63 @@
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 2px;
+  height: var(--height);
 }
 
 .ArticleCard__container {
-  padding: 16px 30px 25px 16px;
-}
-
-.ArticleCard__info {
   display: flex;
-  align-items: center;
-}
-
-.ArticleCard__info__category {
-  display: inline-block;
-  color: var(--pomegranate);
-  margin: 0;
-}
-
-.ArticleCard__info__clock {
-  width: 16px;
-  height: 16px;
-  margin-left: 15px;
-}
-
-.ArticleCard__info__time {
-  font-size: 12px;
-  color: var(--cool-gray);
-  margin-left: 3px;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 16px 24px;
 }
 
 .ArticleCard__title {
   font-size: 20px;
   color: var(--space-black);
   font-weight: 800;
-  margin: 8px 0 0 0;
+  margin: 0;
 }
 
-.ArticleCard__excerpt p {
+.ArticleCard__excerpt {
   font-size: 15px;
   color: var(--cool-gray);
   margin-top: 8px;
+}
+
+.ArticleCard__info {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.ArticleCard__info__item {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 12px;
+  color: var(--space-black);
+}
+
+.ArticleCard__info__category {
+  color: var(--pomegranate);
+  font-size: 14px;
+}
+
+.ArticleCard__info__author {
+  margin-left: 12px;
+  font-weight: bold;
+}
+
+.ArticleCard__info__date {
+  color: var(--cool-gray);
+  margin-left: 12px;
+}
+
+.ArticleCard__info__clock {
+  width: 14px;
+  margin-left: 12px;
+}
+
+.ArticleCard__info__read {
+  color: var(--cool-gray);
+  margin-left: 3px;
 }

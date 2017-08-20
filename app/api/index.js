@@ -5,47 +5,30 @@ import _ from 'lodash';
 
 const rootUrl = 'http://asia.finance.local/wp-json/wp/v2';
 
+const sanitizeArticle = (article) => {
+  const articleKeys = ['id', 'image', 'readingTime', 'title', 'author', 'date', 'category', 'excerpt', 'content', 'tags'];
+  const sanitizedArticle = {
+    ...article,
+    title: new DOMParser().parseFromString(article.title.rendered, 'text/html').documentElement.textContent,
+    excerpt: article.excerpt.rendered.replace(/<p>|<\/p>|\n/g, ''),
+    content: article.content.rendered,
+    image: article.af_featured_image,
+    author: article.af_author,
+    category: article.af_category,
+    readingTime: _.ceil(article.content.rendered.replace(/(<([^>]+)>)/ig, '').split(' ').length / 200),
+  };
+
+  return _.pick(sanitizedArticle, articleKeys);
+};
+
 export const fetchArticle = id =>
-  axios.get(`${rootUrl}/posts/${id}`);
+  axios.get(`${rootUrl}/posts/${id}`)
+    .then(article =>
+      sanitizeArticle(article.data),
+    );
 
-export const fetchLatestArticles = () =>
-  axios.get(`${rootUrl}/posts`)
+export const fetchArticles = (page, filter) =>
+  axios.get(`${rootUrl}/posts?page=${page}`)
     .then(articles =>
-      articles.data,
+      articles.data.map(article => (sanitizeArticle(article))),
     );
-
-export const fetchCategories = () =>
-  axios.get(`${rootUrl}/categories?per_page=100`)
-    .then(categories =>
-      categories.data,
-    );
-
-const sanitizeArticles = (articles, articleKeys) => (
-  articles.map(article => (
-    {
-      ...article,
-      title: new DOMParser().parseFromString(article.title.rendered, 'text/html').documentElement.textContent,
-      excerpt: article.excerpt.rendered,
-      content: article.content.rendered,
-      image: article.af_featured_image,
-      readingTime: _.ceil(article.content.rendered.replace(/(<([^>]+)>)/ig, '').split(' ').length / 200),
-    }
-  )).map(article =>
-    _.pick(article, articleKeys),
-  )
-);
-
-export const fetchInitialData = () =>
-  axios.all([
-    fetchCategories(),
-    fetchLatestArticles(),
-  ]).then((data) => {
-    const categories = data[0];
-    const articles = data[1];
-    const categoryKeys = ['id', 'name', 'link'];
-    const articleKeys = ['id', 'image', 'readingTime', 'title', 'author', 'categories', 'excerpt', 'content', 'tags'];
-    return {
-      categories: categories.map(category => _.pick(category, categoryKeys)),
-      articles: sanitizeArticles(articles, articleKeys),
-    };
-  });

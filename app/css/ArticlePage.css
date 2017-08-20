@@ -1,0 +1,41 @@
+.Article {
+
+}
+
+.Article__category {
+  margin: 0;
+  font-size: 16px;
+  color: var(--pomegranate);
+  font-weight: 600;
+  border-bottom: 2px solid var(--pomegranate);
+  display: inline-block;
+}
+
+.Article__title {
+  margin: 4px 0 0 0;
+  font-size: 36px;
+  color: var(--space-black);
+}
+
+.Article__info {
+  margin: 10px 0 0 0;
+}
+
+.Article__info__item {
+  font-size: 14px;
+  color: var(--cool-gray);
+}
+
+.Article__info__author {
+  font-weight: 600;
+  color: var(--pomegranate);
+}
+
+.Article__info__date {
+  margin-left: 12px;
+}
+
+.Article__image {
+  margin-top: 32px;
+  width: 100%;
+}

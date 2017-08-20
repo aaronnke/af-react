@@ -1,65 +1,70 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getLatestArticles, getCategories } from '../reducers';
+import { withRouter } from 'react-router-dom';
+import { getVisibleArticles, getIsFetching } from '../reducers';
 import * as actions from '../actions';
 import ArticleList from '../components/ArticleList';
+import ArticleListLoading from '../components/ArticleListLoading';
 
 class VisibleArticleListComponent extends Component {
-  static getCategoryName(categoryId, categories) {
-    return categories[categoryId].name;
+  constructor(props) {
+    super(props);
+    this.state = {
+      page: 1,
+    };
+
+    this.fetchData = this.fetchData.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
     this.fetchData();
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   fetchData() {
-    const { fetchInitialData } = this.props;
-    fetchInitialData();
+    const { fetchArticles, filter } = this.props;
+    fetchArticles(this.state.page, filter);
+  }
+
+  handleScroll() {
+    const windowHeight = window.innerHeight;
+    const pageOffset = window.pageYOffset;
+    const totalHeight = document.body.offsetHeight;
+    if (pageOffset + windowHeight >= totalHeight * 0.8) {
+      this.setState(prevState => ({
+        page: prevState.page + 1,
+      }));
+      this.fetchData();
+    }
   }
 
   render() {
-    const { articles, categories } = this.props;
-    const sanitizedArticles = articles.map(article => ({ ...article, category: VisibleArticleListComponent.getCategoryName(article.categories[0], categories) }));
+    const { isFetching, articles } = this.props;
+    if (isFetching && !articles.length) {
+      return <ArticleListLoading />;
+    }
+
     return (
       <ArticleList
-        articles={sanitizedArticles}
+        articles={articles}
       />
     );
   }
 }
 
-const mapStateToProps = state => ({
-  articles: getLatestArticles(state, 'all'),
-  categories: state.categories,
-  // articles: [
-  //   {
-  //     image: 'https://images.asia.finance/contents/images/20170727173036/Graduate-Article-Part-1-.jpg',
-  //     title: 'Employability Issues among Singaporean Graduates: Part 1 Academic Over Vocational Prowess',
-  //     categories: [1, 2],
-  //     readingTime: 3,
-  //     excerpt: '<p>Reasons behind the issue at hand Unnecessary stigma Times are changing It made perfect sense in</p>',
-  //   },
-  //   {
-  //     image: 'https://images.asia.finance/contents/images/20170727112929/shutterstock_325137572-1.jpg',
-  //     title: 'Debunking 3 Common Credit Myths: Couples Edition',
-  //     categories: [2],
-  //     readingTime: 7,
-  //     excerpt: '<p>Whether you’re planning a wedding or already married, it’s critical for you to understand how marriage</p>',
-  //   },
-  // ],
-  // categories: {
-  //   1: {
-  //     id: 1,
-  //     name: 'Career Guidance',
-  //   },
-  //   2: {
-  //     id: 2,
-  //     name: 'Personal Finance',
-  //   },
-  // },
-});
+const mapStateToProps = (state) => {
+  const filter = 'all';
+  return {
+    isFetching: getIsFetching(state, filter),
+    articles: getVisibleArticles(state, filter),
+    filter,
+  };
+};
 
-const VisibleArticleList = connect(mapStateToProps, actions)(VisibleArticleListComponent);
+const VisibleArticleList = withRouter(connect(
+  mapStateToProps,
+  actions,
+)(VisibleArticleListComponent));
 
 export default VisibleArticleList;

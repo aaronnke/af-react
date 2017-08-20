@@ -1,0 +1,44 @@
+.loading {
+  background-color: var(--loader-color);
+}
+
+.ArticleCard__image--loading {
+  animation: color-change 1.8s linear infinite alternate;
+}
+
+.ArticleCard__info__category--loading {
+  height: 18px;
+  width: 72px;
+  animation: color-change 1s linear infinite alternate;
+}
+
+.ArticleCard__info__clock--loading {
+  height: 18px;
+  width: 36px;
+  animation: color-change 1.2s linear infinite alternate;
+}
+
+.ArticleCard__title--loading {
+  height: 24px;
+  width: 75%;
+  margin: 24px 0;
+  animation: color-change 0.8s linear infinite alternate;
+}
+
+.ArticleCard__excerpt--loading {
+  height: 21px;
+  width: 90%;
+}
+
+.ArticleCard__excerpt--loading--top {
+  animation: color-change 0.5s linear infinite alternate;
+}
+
+.ArticleCard__excerpt--loading--bottom {
+  animation: color-change 0.7s linear infinite alternate;
+}
+
+@keyframes color-change {
+  from { background-color: var(--loader-color); }
+  to { background-color: #f9f9f9; }
+}
