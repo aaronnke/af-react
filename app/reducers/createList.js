@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 
-const createList = (filter) => {
+const createList = (category) => {
   const ids = (state = [], action) => {
     switch (action.type) {
       case 'FETCH_ARTICLES_SUCCESS':
-        return filter === action.filter ?
+        return category === action.category ?
           [...state, ...action.response.result] :
           state;
       default:
@@ -13,7 +13,7 @@ const createList = (filter) => {
   };
 
   const isFetching = (state = false, action) => {
-    if (action.filter !== filter) {
+    if (action.category !== category) {
       return state;
     }
     switch (action.type) {
@@ -28,7 +28,7 @@ const createList = (filter) => {
   };
 
   const page = (state = 1, action) => {
-    if (action.filter !== filter) {
+    if (action.category !== category) {
       return state;
     }
     switch (action.type) {

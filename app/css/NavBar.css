@@ -1,0 +1,28 @@
+.NavBarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  background-color: #263238;
+}
+
+.NavBar {
+  width: var(--af-max-width);
+  display: flex;
+  justify-content: center;
+}
+
+.NavBar__link {
+  color: #a9adb0;
+  padding: 24px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.NavBar__link:hover {
+  color: white;
+}
+
+.NavBar__link--active {
+  color: white;
+}

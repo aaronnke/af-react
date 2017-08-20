@@ -27,8 +27,33 @@ export const fetchArticle = id =>
       sanitizeArticle(article.data),
     );
 
-export const fetchArticles = (page, filter) =>
-  axios.get(`${rootUrl}/posts?page=${page}`)
+export const fetchArticles = (page, category) => {
+  let url;
+  if (category === 'all') {
+    url = `${rootUrl}/posts?page=${page}`;
+  } else {
+    let categoryId;
+    switch (category) {
+      case 'wealthManagement':
+        categoryId = 12;
+        break;
+      case 'privateEquity':
+        categoryId = 58;
+        break;
+      case 'entrepreneur':
+        categoryId = 94;
+        break;
+      case 'personalFinance':
+        categoryId = 22;
+        break;
+      default:
+        categoryId = 43;
+        break;
+    }
+    url = `${rootUrl}/posts?categories=${categoryId}&page=${page}`;
+  }
+  return axios.get(url)
     .then(articles =>
       articles.data.map(article => (sanitizeArticle(article))),
     );
+};

@@ -18,13 +18,19 @@ class VisibleArticleListComponent extends Component {
     window.addEventListener('scroll', this.handleScroll);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.category !== prevProps.category) {
+      this.fetchData();
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   }
 
   fetchData() {
-    const { fetchArticles, filter, page } = this.props;
-    fetchArticles(page, filter);
+    const { fetchArticles, category, page } = this.props;
+    fetchArticles(page, category);
   }
 
   handleScroll() {
@@ -52,13 +58,17 @@ class VisibleArticleListComponent extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const filter = 'all';
+const mapStateToProps = (state, { match }) => {
+  let category = match.params.category || 'all';
+  if (category.split('-').length > 1) {
+    const catWords = category.split('-');
+    category = catWords[0] + catWords[1][0].toUpperCase() + catWords[1].slice(1);
+  }
   return {
-    isFetching: getIsFetching(state, filter),
-    articles: getVisibleArticles(state, filter),
-    filter,
-    page: getPage(state, filter),
+    isFetching: getIsFetching(state, category),
+    articles: getVisibleArticles(state, category),
+    category,
+    page: getPage(state, category),
   };
 };
 

@@ -20,28 +20,28 @@ export const fetchArticle = id => dispatch => (
   )
 );
 
-export const fetchArticles = (page, filter) => (dispatch, getState) => {
-  if (getIsFetching(getState(), filter)) {
+export const fetchArticles = (page, category) => (dispatch, getState) => {
+  if (getIsFetching(getState(), category)) {
     return Promise.resolve();
   }
 
   dispatch({
     type: 'FETCH_ARTICLES_REQUEST',
-    filter,
+    category,
   });
 
-  return api.fetchArticles(page, filter).then(
+  return api.fetchArticles(page, category).then(
     (response) => {
       dispatch({
         type: 'FETCH_ARTICLES_SUCCESS',
-        filter,
+        category,
         response: normalize(response, schema.arrayOfArticles),
       });
     },
     (error) => {
       dispatch({
         type: 'FETCH_ARTICLES_FAILURE',
-        filter,
+        category,
         message: error.message || 'Something went wrong.',
       });
     },
