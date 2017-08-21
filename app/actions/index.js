@@ -47,3 +47,22 @@ export const fetchArticles = (page, category) => (dispatch, getState) => {
     },
   );
 };
+
+export const fetchPopularArticles = () => dispatch => (
+  api.fetchArticles(1, 'all').then(
+    (response) => {
+      dispatch({
+        type: 'FETCH_ARTICLES_SUCCESS',
+        category: 'popular',
+        response: normalize(response, schema.arrayOfArticles),
+      });
+    },
+    (error) => {
+      dispatch({
+        type: 'FETCH_ARTICLES_FAILURE',
+        category: 'popular',
+        message: error.message || 'Something went wrong.',
+      });
+    },
+  )
+);

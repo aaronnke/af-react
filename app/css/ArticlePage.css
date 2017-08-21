@@ -1,5 +1,5 @@
 .Article {
-
+  padding: 0 16px;
 }
 
 .Article__category {
@@ -37,5 +37,5 @@
 
 .Article__image {
   margin-top: 32px;
-  width: 100%;
+  max-width: 100%;
 }

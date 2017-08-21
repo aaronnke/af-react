@@ -4,6 +4,7 @@ import createList, * as fromCreateList from './createList';
 
 const listByCategory = combineReducers({
   all: createList('all'),
+  popular: createList('popular'),
   wealthManagement: createList('wealthManagement'),
   privateEquity: createList('privateEquity'),
   entrepreneur: createList('entrepreneur'),

@@ -1,0 +1,33 @@
+.Sidebar {
+
+}
+
+.TopArticles {
+  background-color: white;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 2px;
+  text-align: center;
+  padding: 12px;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.12);
+}
+
+.TopArticles__title {
+  border-bottom: 2px solid var(--pomegranate);
+  padding-bottom: 12px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.TopArticles__item {
+  margin: 0;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 12px 0;
+  text-align: left;
+  display: block;
+}
+
+.TopArticles__item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
